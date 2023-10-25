@@ -6,6 +6,16 @@ int calculate() {
   return 6 * 7;
 }
 
+final separators = "-#¬_~=*+─";
+final separatorsSize = separators.length;
+final typoCharacters = {
+  'a': "4",
+  'e': "3",
+  'i': "1",
+  'o': "0",
+  'l': "!",
+  's': "5"
+};
 Stream<String> loadDictionary() {
   var dictionaryFilename = File('english-dictionary.txt');
   Stream<List<int>> streamedDictionary = dictionaryFilename.openRead();
@@ -27,14 +37,36 @@ Future<String> getRandomWord() async {
   return streamedDictionaryContents.elementAt(indexOfWordToGet);
 }
 
+String getRandomSeparator() {
+  var random = Random();
+  var indexOfSeparatorToGet = random.nextInt(separatorsSize);
+  return separators[indexOfSeparatorToGet];
+}
+
+String typoifyWord(String inputWord) {
+  var random = Random();
+  var stringBuffer = StringBuffer();
+  if (random.nextBool()) {
+    for (final character in inputWord.split('')) {
+      if (typoCharacters[character] != null) {
+        stringBuffer.write(typoCharacters[character]);
+      } else {
+        stringBuffer.write(character);
+      }
+    }
+  } else {
+    stringBuffer.write(inputWord);
+  }
+  return stringBuffer.toString();
+}
+
 Future<String> constructPassphrase(int length) async {
   final passphraseBuffer = StringBuffer('');
-  while (length > 0) {
-    length -= 1;
-    passphraseBuffer.write(await getRandomWord());
+  for (; length > 0; length--) {
+    passphraseBuffer.write(typoifyWord(await getRandomWord()));
     //separator
-    if (length >= 1) {
-      passphraseBuffer.write("-");
+    if (length > 1) {
+      passphraseBuffer.write(getRandomSeparator());
     }
   }
   return passphraseBuffer.toString();
