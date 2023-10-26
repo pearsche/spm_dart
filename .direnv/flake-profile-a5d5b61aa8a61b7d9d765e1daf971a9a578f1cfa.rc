@@ -10,6 +10,8 @@ export AS
 BASH='/nix/store/lf0wpjrj8yx4gsmw2s3xfl58ixmqk8qa-bash-5.2-p15/bin/bash'
 CC='gcc'
 export CC
+CHROME_EXECUTABLE='google-chrome-stable'
+export CHROME_EXECUTABLE
 CONFIG_SHELL='/nix/store/lf0wpjrj8yx4gsmw2s3xfl58ixmqk8qa-bash-5.2-p15/bin/bash'
 export CONFIG_SHELL
 CXX='g++'
@@ -35,13 +37,13 @@ NIX_CC='/nix/store/zlzz2z48s7ry0hkl55xiqp5a73b4mzrg-gcc-wrapper-12.3.0'
 export NIX_CC
 NIX_CC_WRAPPER_TARGET_HOST_x86_64_unknown_linux_gnu='1'
 export NIX_CC_WRAPPER_TARGET_HOST_x86_64_unknown_linux_gnu
-NIX_CFLAGS_COMPILE=' -frandom-seed=9hhzgrvzq9 -isystem /nix/store/kxnl1q1k2sd3agjk6bxz1xc9w35psxd9-dart-3.1.3/include -isystem /nix/store/kxnl1q1k2sd3agjk6bxz1xc9w35psxd9-dart-3.1.3/include'
+NIX_CFLAGS_COMPILE=' -frandom-seed=rsps3qaj6r -isystem /nix/store/kxnl1q1k2sd3agjk6bxz1xc9w35psxd9-dart-3.1.3/include -isystem /nix/store/kxnl1q1k2sd3agjk6bxz1xc9w35psxd9-dart-3.1.3/include'
 export NIX_CFLAGS_COMPILE
 NIX_ENFORCE_NO_NATIVE='1'
 export NIX_ENFORCE_NO_NATIVE
 NIX_HARDENING_ENABLE='fortify fortify3 stackprotector pic strictoverflow format relro bindnow'
 export NIX_HARDENING_ENABLE
-NIX_LDFLAGS='-rpath /home/pearsche/Documents/Programming/Repositories/Personal/spm-dart/outputs/out/lib  -L/nix/store/kxnl1q1k2sd3agjk6bxz1xc9w35psxd9-dart-3.1.3/lib -L/nix/store/kxnl1q1k2sd3agjk6bxz1xc9w35psxd9-dart-3.1.3/lib'
+NIX_LDFLAGS='-rpath /home/pearsche/Documents/Programming/Repositories/Personal/spm_dart/outputs/out/lib  -L/nix/store/kxnl1q1k2sd3agjk6bxz1xc9w35psxd9-dart-3.1.3/lib -L/nix/store/kxnl1q1k2sd3agjk6bxz1xc9w35psxd9-dart-3.1.3/lib'
 export NIX_LDFLAGS
 NIX_NO_SELF_RPATH='1'
 NIX_STORE='/nix/store'
@@ -132,7 +134,7 @@ name='nix-shell-env'
 export name
 nativeBuildInputs=''
 export nativeBuildInputs
-out='/home/pearsche/Documents/Programming/Repositories/Personal/spm-dart/outputs/out'
+out='/home/pearsche/Documents/Programming/Repositories/Personal/spm_dart/outputs/out'
 export out
 outputBin='out'
 outputDev='out'
@@ -163,7 +165,7 @@ preConfigurePhases=' updateAutotoolsGnuConfigScriptsPhase'
 declare -a preFixupHooks=('_moveToShare' '_multioutDocs' '_multioutDevs' )
 preferLocalBuild='1'
 export preferLocalBuild
-prefix='/home/pearsche/Documents/Programming/Repositories/Personal/spm-dart/outputs/out'
+prefix='/home/pearsche/Documents/Programming/Repositories/Personal/spm_dart/outputs/out'
 declare -a propagatedBuildDepFiles=('propagated-build-build-deps' 'propagated-native-build-inputs' 'propagated-build-target-deps' )
 propagatedBuildInputs=''
 export propagatedBuildInputs

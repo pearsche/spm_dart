@@ -13,6 +13,7 @@
 						dart
 						flutter
 					];
+					CHROME_EXECUTABLE = "google-chrome-stable";
 				};
 			}
 		);
