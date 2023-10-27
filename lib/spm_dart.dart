@@ -2,10 +2,6 @@ import 'dart:io';
 import 'dart:convert';
 import 'dart:math';
 
-int calculate() {
-  return 6 * 7;
-}
-
 final separators = "-#¬_~=*+─";
 final separatorsSize = separators.length;
 final typoCharacters = {
@@ -16,30 +12,34 @@ final typoCharacters = {
   'l': "!",
   's': "5"
 };
-Stream<String> loadDictionary() {
-  var dictionaryFilename = File('english-dictionary.txt');
-  Stream<List<int>> streamedDictionary = dictionaryFilename.openRead();
+Stream<String> loadDictionary(String dictionaryFilename) {
+  var dictionary = File(dictionaryFilename);
+  Stream<List<int>> streamedDictionary = dictionary.openRead();
   var streamedDictionaryContents =
       utf8.decoder.bind(streamedDictionary).transform(const LineSplitter());
   return streamedDictionaryContents;
 }
 
-Future getDictionarySize() {
-  var streamedDictionaryContents = loadDictionary();
+Future getDictionarySize(String dictionaryFilename) {
+  var streamedDictionaryContents = loadDictionary(dictionaryFilename);
   return streamedDictionaryContents.length;
 }
 
-Future<String> getRandomWord() async {
-  var streamedDictionaryContents = loadDictionary();
+Future<String> getRandomWord(String dictionaryFilename) async {
+  var streamedDictionaryContents = loadDictionary(dictionaryFilename);
   var random = Random();
   // Get a random number, from 0 to the dictionary size
-  var indexOfWordToGet = random.nextInt(await getDictionarySize());
+  var indexOfWordToGet =
+      random.nextInt(await getDictionarySize(dictionaryFilename));
   return streamedDictionaryContents.elementAt(indexOfWordToGet);
 }
 
-String getRandomSeparator() {
-  var random = Random();
-  var indexOfSeparatorToGet = random.nextInt(separatorsSize);
+String getSeparator(bool randomize) {
+  var indexOfSeparatorToGet = 0;
+  if (randomize) {
+    var random = Random();
+    indexOfSeparatorToGet = random.nextInt(separatorsSize);
+  }
   return separators[indexOfSeparatorToGet];
 }
 
@@ -60,13 +60,19 @@ String typoifyWord(String inputWord) {
   return stringBuffer.toString();
 }
 
-Future<String> constructPassphrase(int length) async {
+Future<String> constructPassphrase(int length, bool randomizeSeparators,
+    bool typoification, String dictionaryFilename) async {
   final passphraseBuffer = StringBuffer('');
+  var nextWord = "";
   for (; length > 0; length--) {
-    passphraseBuffer.write(typoifyWord(await getRandomWord()));
+    nextWord = await getRandomWord(dictionaryFilename);
+    if (typoification) {
+      nextWord = typoifyWord(nextWord);
+    }
+    passphraseBuffer.write(nextWord);
     //separator
     if (length > 1) {
-      passphraseBuffer.write(getRandomSeparator());
+      passphraseBuffer.write(getSeparator(randomizeSeparators));
     }
   }
   return passphraseBuffer.toString();
