@@ -27,9 +27,10 @@ void main() {
       'Construct a passphrase, randomized words with typoification, with randomized separators',
       () async {
     RegExp toMatch = RegExp(
-        r'([a-z0-5!]*)(-|#|¬|_|~|\=|\*|\+|─)([a-z0-5!]*)(-|#|¬|_|~|\=|\*|\+|─)([a-z0-5!]*)');
+        r'([a-zA-Z0-5!]*)(-|#|¬|_|~|\=|\*|\+|─)([a-zA-Z0-5!]*)(-|#|¬|_|~|\=|\*|\+|─)([a-zA-Z0-5!]*)');
     var passphrase =
         await constructPassphrase(3, false, false, "example-dictionary.txt");
+    print(passphrase);
     RegExpMatch? match = toMatch.firstMatch(passphrase);
     expect(passphrase, match![0]);
   });
