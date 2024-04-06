@@ -1,6 +1,6 @@
 name: spm_dart
 description: A simple passphrase manager.
-version: 1.0.1
+version: 1.0.2
 repository: https://github.com/pearsche/spm_dart
 
 environment:

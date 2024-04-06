@@ -1,5 +1,3 @@
-import 'dart:io';
-import 'dart:convert';
 import 'dart:math';
 
 final separators = "-#¬_~=*+─";
@@ -12,26 +10,27 @@ final typoCharacters = {
   'l': "!",
   's': "5"
 };
-Stream<String> loadDictionary(String dictionaryFilename) {
-  var dictionary = File(dictionaryFilename);
-  Stream<List<int>> streamedDictionary = dictionary.openRead();
-  var streamedDictionaryContents =
-      utf8.decoder.bind(streamedDictionary).transform(const LineSplitter());
-  return streamedDictionaryContents;
+
+Future<List<String>> loadDictionary(Future<String> dictionaryFile) async {
+  List<String> dictionary = List.empty(growable: true);
+  await dictionaryFile.asStream().forEach((element) {
+    dictionary = element.split('\n');
+  });
+  return dictionary;
 }
 
-Future getDictionarySize(String dictionaryFilename) {
-  var streamedDictionaryContents = loadDictionary(dictionaryFilename);
-  return streamedDictionaryContents.length;
+Future getDictionarySize(Future<String> dictionaryFile) async {
+  var dictionary = await loadDictionary(dictionaryFile);
+  return dictionary.length;
 }
 
-Future<String> getRandomWord(String dictionaryFilename) async {
-  var streamedDictionaryContents = loadDictionary(dictionaryFilename);
+Future<String> getRandomWord(Future<String> dictionaryFile) async {
+  var dictionary = await loadDictionary(dictionaryFile);
   var random = Random();
   // Get a random number, from 0 to the dictionary size
   var indexOfWordToGet =
-      random.nextInt(await getDictionarySize(dictionaryFilename));
-  return streamedDictionaryContents.elementAt(indexOfWordToGet);
+      random.nextInt(await getDictionarySize(dictionaryFile));
+  return dictionary.elementAt(indexOfWordToGet);
 }
 
 String getSeparator(bool randomize) {
@@ -60,12 +59,13 @@ String typoifyWord(String inputWord) {
   return stringBuffer.toString();
 }
 
+// FIXME: maybe don't do this, make the file be loaded somewhere else
 Future<String> constructPassphrase(int length, bool randomizeSeparators,
-    bool typoification, String dictionaryFilename) async {
+    bool typoification, Future<String> dictionaryFile) async {
   final passphraseBuffer = StringBuffer('');
   var nextWord = "";
   for (; length > 0; length--) {
-    nextWord = await getRandomWord(dictionaryFilename);
+    nextWord = await getRandomWord(dictionaryFile);
     if (typoification) {
       nextWord = typoifyWord(nextWord);
     }
